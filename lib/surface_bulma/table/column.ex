@@ -10,4 +10,8 @@ defmodule SurfaceBulma.Table.Column do
 
   @doc "Column header text"
   prop label, :string, required: true
+
+  @doc "Is column sortable?"
+
+  prop sortable, :boolean, default: false
 end

@@ -1,15 +1,21 @@
 defmodule SurfaceBulma.Table do
   @moduledoc """
-  The inevitable HTML table.
+  A Bulma HTML table.
 
-  You can create a table by setting a souce `data` to it and defining
+  You can create a table by passing `data` to it and defining
   columns using the `Table.Column` component.
   """
 
-  use Surface.Component
+  use Surface.LiveComponent
 
-  @doc "The data that populates the table"
+  @doc "The data that populates the table internal"
   prop data, :list, required: true
+
+  @doc "The internal data that populates the table"
+  data sort_by, :string, default: nil
+
+  @doc "Clicking column again should reverse search"
+  data sort_reverse, :boolean, default: false
 
   @doc "The table is expanded (full-width)"
   prop expanded, :boolean, default: true
@@ -33,7 +39,21 @@ defmodule SurfaceBulma.Table do
   @doc "The columns of the table"
   slot cols, props: [item: ^data], required: true
 
+  def mount(socket) do
+    socket = Surface.init(socket)
+    {:ok, socket}
+  end
+
   def render(assigns) do
+    data =
+      cond do
+        !is_nil(assigns.sort_by) ->
+          Enum.sort_by(assigns.data, assigns.sort_by)
+
+        true ->
+          assigns.data
+      end
+
     ~H"""
     <div class={{ @class }}>
       <table class={{
@@ -51,7 +71,7 @@ defmodule SurfaceBulma.Table do
         </thead>
         <tbody>
           <tr
-            :for={{ {item, index} <- Enum.with_index(@data) }}
+            :for={{ {item, index} <- Enum.with_index(data) }}
             class={{ row_class_fun(@rowClass).(item, index) }}>
             <td :for.index={{ index <- @cols }}>
               <span><slot name="cols" index={{ index }} :props={{ item: item }}/></span>
@@ -61,6 +81,11 @@ defmodule SurfaceBulma.Table do
       </table>
     </div>
     """
+  end
+
+  defp fa_icon_arrow_direction(sort_by, sort_reverse, col) do
+    cond do
+    end
   end
 
   defp row_class_fun(nil), do: fn _, _ -> "" end

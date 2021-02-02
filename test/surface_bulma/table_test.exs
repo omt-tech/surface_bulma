@@ -15,7 +15,10 @@ defmodule Surface.Components.TableTest do
     def render(assigns) do
       data = [
         %{id: 1, name: "John"},
-        %{id: 2, name: "Jane"}
+        %{id: 2, name: "Jane"},
+        %{id: 3, name: "Albert"},
+        %{id: 4, name: "Diana"},
+        %{id: 5, name: "Elizabeth"}
       ]
 
       ~H"""
