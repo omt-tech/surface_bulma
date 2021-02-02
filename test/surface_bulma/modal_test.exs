@@ -159,11 +159,37 @@ defmodule Surface.Components.ModalTest do
            """
   end
 
-  test "card modal should be usable without header and footer" do
+  test "card modal should be usable without header and footer should still show close button" do
     html =
       render_surface do
         ~H"""
         <Card show={{false}} show_close_button={{true}}>
+        hello
+        </Card>
+        """
+      end
+
+    assert html =~ """
+           <div class="modal">
+             <div class="modal-background"></div>
+             <div class="modal-card">
+               <header class="modal-card-head">
+                 <button aria-label="close" class="delete">
+           </button>
+               </header>
+               <section class="modal-card-body">
+           hello
+               </section>
+             </div>
+           </div>
+           """
+  end
+
+  test "card modal should be usable without header and footer. If no close button don't show header" do
+    html =
+      render_surface do
+        ~H"""
+        <Card show={{false}} show_close_button={{false}}>
         hello
         </Card>
         """
